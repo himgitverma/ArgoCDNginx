@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netflixmovie-react-app
+  labels:
+    app: netflixmovie
+spec:
+  replicas: 2   # number of pods you want
+  selector:
+    matchLabels:
+      app: netflixmovie
+  template:
+    metadata:
+      labels:
+        app: netflixmovie
+    spec:
+      containers:
+      - name: netflixmovie-container
+        image: 525212/netflixmovie-react-app:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netflixmovie-service
+  labels:
+    app: netflixmovie
+spec:
+  type: NodePort   # use LoadBalancer if on cloud
+  selector:
+    app: netflixmovie
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080   # NodePort range: 30000–32767
